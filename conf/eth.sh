@@ -20,6 +20,7 @@
 	#sudo sed -i '/Option         "ConnectedMonitor" "DFP-0"/a    Option         "CustomEDID" "DFP-0:/etc/X11/dfp0.edid"' /etc/X11/xorg.conf
 	#sudo cp dfp0.edid /etc/X11/dfp0.edid
 	#sudo chattr +i /etc/X11/xorg.conf
+	#sudo DISPLAY=:0 XAUTHORITY=/var/run/lightdm/root/:0 nvidia-settings -t -q GPUUtilization
 	#sudo shutdown -r now
 
 	export DISPLAY=:0
@@ -38,6 +39,7 @@
            nvidia-smi -i $i -pl 75
            printf "%s\n" "setting memory overclock of 500 Mhz..."
            nvidia-settings -a [gpu:${i}]/GPUMemoryTransferRateOffset[3]=500
+	   #DISPLAY=:0 XAUTHORITY=/var/run/lightdm/root/:0 nvidia-settings -a [gpu:${i}]/GPUMemoryTransferRateOffset[2]=500          
        elif nvidia-smi -i $i --query-gpu=name --format=csv,noheader,nounits | grep -E "1070" 1> /dev/null
        then 
            printf "%s\n" "found GeForce GTX 1070 at index $i..."
@@ -45,10 +47,10 @@
            nvidia-smi -i $i -pm 1
            printf "%s\n" "setting power limit to 105 watts.."
            nvidia-smi -i $i -pl 105
-           printf "%s\n" "setting memory overclock of 1400 Mhz..."
+           printf "%s\n" "setting memory overclock of 500 Mhz..."
 	   #DISPLAY=:0 XAUTHORITY=/var/run/lightdm/root/:0 
-	   nvidia-settings -a [gpu:${i}]/GPUMemoryTransferRateOffset[2]=1200
-           nvidia-settings -a [gpu:${i}]/GPUMemoryTransferRateOffset[3]=1200
+	   #nvidia-settings -a [gpu:${i}]/GPUMemoryTransferRateOffset[2]=1110
+           nvidia-settings -a [gpu:${i}]/GPUMemoryTransferRateOffset[2]=550
 	   #nvidia-settings -a [gpu:${i}]/GPUGraphicsMemoryOffset[3]=100
        fi 
     done
