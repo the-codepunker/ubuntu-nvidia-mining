@@ -1,6 +1,14 @@
 <?php
 
+	//todo
+	//nvidia-smi -q -d CLOCK
+	//nvidia-smi
+
+	use Mailgun\Mailgun;
+
 	(php_sapi_name() === 'cli') or die("not allowed");
+
+	require 'vendor/autoload.php';
 
 	if(!file_exists(__DIR__ . '/ethdaemon.ini')){
 		echo "The configuration file doesn't exist...";
@@ -8,12 +16,15 @@
 	}
 
 	$conf = parse_ini_file(__DIR__ . '/ethdaemon.ini');
+	if(empty($conf) || count($conf)!==5) {
+		echo "The configuration file is missing directives";
+		die();		
+	}
 
-	define("MONITOR_BY", "SCREEN"); // valid values are POOL and SCREEN
 
-	//todo
-	//nvidia-smi -q -d CLOCK
-	//nvidia-smi
+	$client = new \Http\Adapter\Guzzle6\Client();
+	$mailgun = new \Mailgun\Mailgun($conf["MAILGUN_PRIVATE_KEY"], $client);
+	$domain = $conf["MAILGUN_DOMAIN"];
 
     function colorset($str, $color)
     {
@@ -34,7 +45,7 @@
         return $ansi_str;
     }
 
-    if(MONITOR_BY === "POOL") // connect to the pool and see how things are going
+    if($conf["MONITOR_BY"] === "POOL") : // connect to the pool and see how things are going
 	    while (1) {
 			$content = file_get_contents('https://eth.nanopool.org/api/v1/workers/0x83347b2d521c697bfb6b25b3633304c1fbd9a553');
 			$content = json_decode($content);
@@ -51,8 +62,9 @@
 	        }
 	        echo "\n";
 	    }
+	endif;
 
-	if(MONITOR_BY === "SCREEN") // connect to a screen session output and parse it
+	if($conf["MONITOR_BY"] === "SCREEN") : // connect to a screen session output and parse it
     	$logfile = __DIR__ . '/scr.log';
     	exec("screen -S miner -X logfile {$logfile}");
 
@@ -74,8 +86,12 @@
 
 			if($content === $last) {
 				echo colorset("Miner hanged.", "red+bold") . "\n";
-				//trigger a webhook
-				file_get_contents("https://www.codepunker.com/tools/web-hooks/82?execute=storeWebHook&pass=8nqjmb8d&miner=hanged");
+				$result = $mailgun->sendMessage($domain, array(
+					'from'    => 'Notifications <miner@'.$domain.'>',
+					'to'      => 'Me <'.$conf["NOTIFICATIONS_RECIPIENT"].'>',
+					'subject' => 'Miner status',
+					'text'    => 'Miner hanged!'
+				));
 				die;
 			}
 			$speed_found = 0;
@@ -90,8 +106,12 @@
 			echo colorset("Speed found: ", $color) . colorset($speed_found, $color) . "\n";
 
 			if($speed_found < 200) {
-				//trigger a webhook
-				file_get_contents("https://www.codepunker.com/tools/web-hooks/82?execute=storeWebHook&pass=8nqjmb8d&miner=slow");
+				$result = $mailgun->sendMessage($domain, array(
+					'from'    => 'Notifications <miner@'.$domain.'>',
+					'to'      => 'Me <'.$conf["NOTIFICATIONS_RECIPIENT"].'>',
+					'subject' => 'Miner status',
+					'text'    => 'Miner too slow!'
+				));
 				die;
 			}
 
@@ -104,5 +124,5 @@
 
 	        $last = $content;
 	    }
-
+	endif;
 	
