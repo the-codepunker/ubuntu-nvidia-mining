@@ -1,2 +1,4 @@
-/monitor/ethdaemon.ini
+/ethdaemon.ini
 /vendor
+/nohup.out
+/scr.log
