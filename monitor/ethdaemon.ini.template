@@ -1,0 +1,3 @@
+MONITOR_BY = SCREEN (connects to the screen session where the miner is sends notification or acts immediately) OR POOL (api based has a delay)
+MAILGUN_PUBLIC_KEY = PUBLIC_KEY (notification sent by mailgun you need your keys here)
+MAILGUN_PRIVATE_KEY = PRIVATE_KEY (notification sent by mailgun you need your keys here)

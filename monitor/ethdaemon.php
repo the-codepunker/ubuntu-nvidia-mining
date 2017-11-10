@@ -1,7 +1,19 @@
 <?php
 
 	(php_sapi_name() === 'cli') or die("not allowed");
+
+	if(!file_exists(__DIR__ . '/ethdaemon.ini')){
+		echo "The configuration file doesn't exist...";
+		die();
+	}
+
+	$conf = parse_ini_file(__DIR__ . '/ethdaemon.ini');
+
 	define("MONITOR_BY", "SCREEN"); // valid values are POOL and SCREEN
+
+	//todo
+	//nvidia-smi -q -d CLOCK
+	//nvidia-smi
 
     function colorset($str, $color)
     {
