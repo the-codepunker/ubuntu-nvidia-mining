@@ -1,5 +1,9 @@
 #! /bin/bash
 
+
+#THIS IS THE CRON TAB OC FILE: SET THE CRON LIKE THIS AS SUDO: @reboot screen -S miner -dm bash -c 'echo waiting; sleep 60; cd /home/danijelu1/Desktop/eth/; ./occ.sh; echo waiting; sleep 10; ./execute.sh; sleep 24h; shutdown -r now;'
+
+
 	#lspci -v | grep VGA
 	#
 	#sudo update-grub
@@ -50,9 +54,9 @@
            printf "%s\n" "setting memory overclock of 1400 Mhz..."
 	   #DISPLAY=:0 XAUTHORITY=/var/run/lightdm/root/:0 
 	   #nvidia-settings -a [gpu:${i}]/GPUMemoryTransferRateOffset[2]=550
-	   nvidia-settings -a [gpu:${i}]/GPUFanControlState=1
-	   nvidia-settings -a [fan:${i}]/GPUTargetFanSpeed=80
-           nvidia-settings -a [gpu:${i}]/GPUMemoryTransferRateOffset[3]=1400
+	   DISPLAY=:0 XAUTHORITY=/var/run/lightdm/root/:0 nvidia-settings -a [gpu:${i}]/GPUFanControlState=1
+	   DISPLAY=:0 XAUTHORITY=/var/run/lightdm/root/:0 nvidia-settings -a [fan:${i}]/GPUTargetFanSpeed=80
+           DISPLAY=:0 XAUTHORITY=/var/run/lightdm/root/:0 nvidia-settings -a [gpu:${i}]/GPUMemoryTransferRateOffset[3]=1400
 	   #nvidia-settings -a [gpu:${i}]/GPUGraphicsMemoryOffset[3]=100
        fi 
     done
