@@ -1,9 +1,4 @@
 #! /bin/bash
-
-
-#THIS IS THE CRON TAB OC FILE: SET THE CRON LIKE THIS AS SUDO: @reboot screen -S miner -dm bash -c 'echo waiting; sleep 60; cd /home/danijelu1/Desktop/eth/; ./occ.sh; echo waiting; sleep 10; ./execute.sh; sleep 24h; shutdown -r now;'
-
-
 	#lspci -v | grep VGA
 	#
 	#sudo update-grub
