@@ -29,7 +29,7 @@
 
 		echo join("\n", $content) . PHP_EOL;
 
-		exec("shutdown -r now");
+		exec("/sbin/shutdown -r now");
 		echo "Restarting ... \n";
 
 	}
