@@ -1,12 +1,15 @@
 <?php
 	/**
 	 * simple ethminer monitor written in PHP 
-	 * to enable it put `cd /home/__USER__/Desktop/eth && php ethdaemon.php >> /home/__USER__/Desktop/eth/miner.log 2>&1` in `sudo crontab -e`
+	 * to enable it put `cd /home/__USER__/Desktop/eth && php ethdaemon.php >> /home/__USER__/Desktop/eth/miner.log 2>&1` in `sudo crontab -e` every 10 minutes or so
 	 */
 	(php_sapi_name() === 'cli') or die("not allowed");
-
-	$output = shell_exec("nvidia-smi -i 5 --query-gpu=utilization.gpu --format=csv,noheader,nounits"); //check the 5h card
-	echo "I am " . shell_exec("whoami") . "Current GPU utilization is: " . $output . PHP_EOL;
+    for($i=0; $i<13; $i++) {
+        $output = shell_exec("nvidia-smi -i {$i} --query-gpu=utilization.gpu --format=csv,noheader,nounits");
+        echo "I am " . shell_exec("whoami") . "Current GPU utilization is: " . $output . PHP_EOL;
+            if($output<=40)
+                break;
+    }
 	if($output <= 40) {
 
     	$logfile = __DIR__ . '/scr.log';
