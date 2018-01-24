@@ -23,13 +23,19 @@
 17. Make sure lightdm doesn't overwrite your xorg.conf file on the next reboot: `sudo chattr +i /etc/X11/xorg.conf` and restart. If everything went well... your xorg file will remain unchanged, but the system will no longer boot in graphics mode so you will need to switch to text-only mode.
 18. To fire up the miner you will need to first execute my script for over-clocking located in the root folder of the repo: `sudo ./occ.sh`. If it works it will tell you that it changed the memory frequency of each GPU and the maximum power it can draw.
 19. Finally edit the file called `execute.sh` and add your address instead of mine. Then run `sudo ./execute.sh` and **BOOM**.
-20. To monitor your miner you can run `nvidia-smi` to see power draw and GPU temperatures. If you run `nvidia-smi -q -d CLOCK` you will see core and memory clocks for each GPU.
 
 ## Automation through cron - Set the crontab like this as sudo: 
 
 	@reboot screen -S miner -dm bash -c 'echo waiting; sleep 60; cd /home/___USER__/__FOLDER/; ./occ.sh; echo waiting; sleep 10; ./execute.sh;'
 
 	`0 9 * * * /sbin/shutdown -r now
+
+### Monitoring the miner
+
+1. Rename daemon.ini.template to daemon.ini
+2. Edit daemon.ini and assign the correct values to the settings in it
+3. Add this entry in the root crontab with `sudo crontab -e`. Don't forget to replace the folder paths.
+		`*/10 * * * * cd /home/[__USER__]/Desktop/eth && php ethdaemon.php >> /home/[__USER__]/Desktop/eth/miner.log 2>&1`
 
 ### If you want tips on how to set up the hardware check out [my post](https://www.codepunker.com/blog/ethereum-mining-on-ubuntu-16-04-with-nvidia-gpus).
 

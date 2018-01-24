@@ -4,12 +4,17 @@
 	 * to enable it put `cd /home/__USER__/Desktop/eth && php ethdaemon.php >> /home/__USER__/Desktop/eth/miner.log 2>&1` in `sudo crontab -e` every 10 minutes or so
 	 */
 	(php_sapi_name() === 'cli') or die("not allowed");
-    for($i=0; $i<13; $i++) {
+	$conf = parse_ini_file(__DIR__ . 'daemon.ini');
+	(!empty($conf["NO_OF_GPUS"])) or die("You have to define the NO_OF_GPUS setting in daemon.ini");
+
+	echo "I am " . shell_exec("whoami");
+    for($i=0; $i<($conf["NO_OF_GPUS"]-1); $i++) {
         $output = shell_exec("nvidia-smi -i {$i} --query-gpu=utilization.gpu --format=csv,noheader,nounits");
-        echo "I am " . shell_exec("whoami") . "Current GPU utilization is: " . $output . PHP_EOL;
+        echo "Current GPU{$i} utilization is: {$output} \n";
             if($output<=40)
                 break;
     }
+
 	if($output <= 40) {
 
     	$logfile = __DIR__ . '/scr.log';
