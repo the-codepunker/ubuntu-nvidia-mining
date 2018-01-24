@@ -4,7 +4,7 @@
 	 * to enable it put `cd /home/__USER__/Desktop/eth && php ethdaemon.php >> /home/__USER__/Desktop/eth/miner.log 2>&1` in `sudo crontab -e` every 10 minutes or so
 	 */
 	(php_sapi_name() === 'cli') or die("not allowed");
-	$conf = parse_ini_file(__DIR__ . 'daemon.ini');
+	$conf = parse_ini_file(__DIR__ . '/daemon.ini');
 	(!empty($conf["NO_OF_GPUS"])) or die("You have to define the NO_OF_GPUS setting in daemon.ini");
 
 	echo "I am " . shell_exec("whoami");
