@@ -37,7 +37,7 @@
 
 		echo join("\n", $content) . PHP_EOL;
 
-		exec("/sbin/shutdown -r now");
+		exec("/sbin/reboot --reboot --force");
 		echo "Restarting ... \n";
 
 	}
