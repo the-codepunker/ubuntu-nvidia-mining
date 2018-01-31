@@ -3,7 +3,7 @@
 ## Step by step guide
 1. Assemble the rig with all graphics cards and make sure they're all "spinning"
 2. Install Ubuntu desktop from a bootable USB stick by following the on-screen step-by-step guide. If the Ubuntu installer doesn't start, hit F6 during boot and select [nomodeset](https://drive.google.com/file/d/1mF225NO0mqGZ_adTn0EyxVqzus31bNJJ/view?usp=drivesdk) from the options menu in the bottom right area.
-3. Make sure you check the "Install third party software for graphics..." - this will preinstall the nvidia drivers on your system. Once the OS is installed, fire up a terminal and install git. `sudo apt-get install git && sudo apt-get install openssh-server && sudo apt-get install screen && sudo apt-get install htop`
+3. Make sure you check the "Install third party software for graphics..." - this will preinstall the nvidia drivers on your system. Once the OS is installed, fire up a terminal and install git. `sudo apt-get install git && sudo apt-get install openssh-server && sudo apt-get install screen && sudo apt-get install htop && sudo apt-get install curl`
 4. Go into your router management console and forward a port to port 22 on the mining machine IP address. For example, I forward port 2017 on my router to port 22 on local address 192.168.0.69 which is the reserved IP address of the miner.
 5. Edit the `/etc/ssh/sshd_config` and where it says `PasswordAuthentication no` change it to `PasswordAuthentication yes`. This is not the most secure option, but if you know this you will also know how to set up key based authentication over ssh.
 6. Press `ctrl + alt + f1` to switch to a text-only terminal.

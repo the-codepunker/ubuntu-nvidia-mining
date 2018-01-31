@@ -1,1 +1,5 @@
 NO_OF_GPUS = 0
+MAILGUN_KEY = PRIVATE_KEY (notification sent by mailgun you need your key here - the sandbox domain will work)
+MAILGUN_DOMAIN = sandboxWHATEVER.mailgun.org
+NOTIFICATIONS_RECIPIENT = me@example.com
+MINER_ID = An ID for your miner for notifications

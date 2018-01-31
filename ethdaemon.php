@@ -8,7 +8,7 @@
 	(!empty($conf["NO_OF_GPUS"])) or die("You have to define the NO_OF_GPUS setting in daemon.ini");
 
 	echo "I am " . shell_exec("whoami");
-	for($i=0; $i<($conf["NO_OF_GPUS"]-1); $i++) {
+	for($i=0; $i<$conf["NO_OF_GPUS"]; $i++) {
         	$output = shell_exec("nvidia-smi -i {$i} --query-gpu=utilization.gpu --format=csv,noheader,nounits");
 		echo "Current GPU{$i} utilization is: {$output} \n";
 		if($output<=40)
@@ -20,7 +20,8 @@
     	$logfile = __DIR__ . '/scr.log';
     	exec("screen -S miner -X logfile {$logfile}");
 
-		echo "Miner failed at " . date('Y-m-d H:i:s') . ". GPU {$i} reported only {$output} utilization" . PHP_EOL;
+		$notification = "Miner failed at " . date('Y-m-d H:i:s') . ". GPU {$i} reported only {$output} utilization.";
+		echo $notification  . PHP_EOL;
 		echo "Gathering some output ... " . PHP_EOL;
 
 		$content = [];
@@ -36,6 +37,13 @@
 			unlink($logfile);
 
 		echo join("\n", $content) . PHP_EOL;
+
+		exec("curl -s --user 'api:{$conf['MAILGUN_KEY']}' \
+		    https://api.mailgun.net/v3/{$conf['MAILGUN_DOMAIN']}/messages \
+		    -F from='Miner {$conf['MINER_ID']} <mailgun@{$conf['MAILGUN_DOMAIN']}>' \
+		    -F to={$conf['NOTIFICATIONS_RECIPIENT']} \
+		    -F subject='Miner {$conf['MINER_ID']} failed' \
+		    -F text='{$notification}'");
 
 		exec("/sbin/reboot --reboot --force");
 		echo "Restarting ... \n";
