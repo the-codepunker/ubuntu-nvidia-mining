@@ -8,27 +8,27 @@
 	(!empty($conf["NO_OF_GPUS"])) or die("You have to define the NO_OF_GPUS setting in daemon.ini");
 
 	echo "I am " . shell_exec("whoami");
-    for($i=0; $i<($conf["NO_OF_GPUS"]-1); $i++) {
-        $output = shell_exec("nvidia-smi -i {$i} --query-gpu=utilization.gpu --format=csv,noheader,nounits");
-        echo "Current GPU{$i} utilization is: {$output} \n";
-            if($output<=40)
-                break;
-    }
+	for($i=0; $i<($conf["NO_OF_GPUS"]-1); $i++) {
+        	$output = shell_exec("nvidia-smi -i {$i} --query-gpu=utilization.gpu --format=csv,noheader,nounits");
+		echo "Current GPU{$i} utilization is: {$output} \n";
+		if($output<=40)
+                	break;
+	}
 
 	if($output <= 40) {
 
     	$logfile = __DIR__ . '/scr.log';
     	exec("screen -S miner -X logfile {$logfile}");
 
-		echo "Miner failed at " . date('Y-m-d H:i:s') . PHP_EOL;
+		echo "Miner failed at " . date('Y-m-d H:i:s') . "GPU: {$i} reported only {$output} utilization" . PHP_EOL;
 		echo "Gathering some output ... " . PHP_EOL;
 
 		$content = [];
 		exec("screen -S miner -X log on");
 
 		//default screen dump to disk time is 10 secs ... so let's wait 15
-		echo "Sleeping for 15 seconds to gather some output ... \n";
-		sleep(15);
+		echo "Sleeping for 10 seconds to gather some output ... \n";
+		sleep(10);
 		$content = file($logfile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 		$entry = null;
 		exec('screen -S miner -X log off'); //disable logging
