@@ -20,7 +20,7 @@
     	$logfile = __DIR__ . '/scr.log';
     	exec("screen -S miner -X logfile {$logfile}");
 
-		echo "Miner failed at " . date('Y-m-d H:i:s') . "GPU: {$i} reported only {$output} utilization" . PHP_EOL;
+		echo "Miner failed at " . date('Y-m-d H:i:s') . ". GPU {$i} reported only {$output} utilization" . PHP_EOL;
 		echo "Gathering some output ... " . PHP_EOL;
 
 		$content = [];
