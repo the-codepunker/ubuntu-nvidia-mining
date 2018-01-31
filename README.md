@@ -28,7 +28,7 @@
 
 	@reboot screen -S miner -dm bash -c 'echo waiting; sleep 60; cd /home/___USER__/__FOLDER/; ./occ.sh; echo waiting; sleep 10; ./execute.sh;'
 
-	`0 9 * * * /sbin/shutdown -r now
+	0 9 * * * /sbin/reboot --reboot --force
 
 ### Monitoring the miner
 
@@ -36,6 +36,7 @@
 2. Edit daemon.ini and assign the correct values to the settings in it
 3. Add this entry in the root crontab with `sudo crontab -e`. Don't forget to replace the folder paths.
 		`*/10 * * * * cd /home/[__USER__]/Desktop/eth && php ethdaemon.php >> /home/[__USER__]/Desktop/eth/miner.log 2>&1`
+4. You can then check the log like this: `cat miner.log | grep -n --after-context=20 'Miner failed'`
 
 ### If you want tips on how to set up the hardware check out [my post](https://www.codepunker.com/blog/ethereum-mining-on-ubuntu-16-04-with-nvidia-gpus).
 
