@@ -28,8 +28,8 @@
 		exec("screen -S miner -X log on");
 
 		//default screen dump to disk time is 10 secs ... so let's wait 15
-		echo "Sleeping for 10 seconds to gather some output ... \n";
-		sleep(10);
+		echo "Sleeping for 30 seconds to gather some output ... \n";
+		sleep(30);
 		$content = file($logfile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 		$entry = null;
 		exec('screen -S miner -X log off'); //disable logging
